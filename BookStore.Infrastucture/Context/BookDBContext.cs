@@ -10,11 +10,11 @@ namespace BookStore.Infrastructure.Context
     {
         public BookDBContext() : base() { }
 
-        // Constructor accepting DbContextOptions for dependency injection
+
         public BookDBContext(DbContextOptions<BookDBContext> options)
             : base(options) { }
 
-        // DbSet properties for your entities
+
         public virtual DbSet<catlog> Catlogs { get; set; }
         public virtual DbSet<Book> Books { get; set; }
         public virtual DbSet<Author> Authors { get; set; }

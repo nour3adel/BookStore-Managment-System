@@ -131,9 +131,65 @@ namespace BookStore.Application.Implementations
         }
 
 
-        public async Task<Response<string>> UpdateOrder(int id, EditOrderDTO editBookDTO)
+        public async Task<Response<string>> UpdateOrder(int id, EditOrderDTO editOrder)
         {
-            throw new NotImplementedException();
+            if (editOrder == null)
+            {
+                return BadRequest<string>("Invalid order data.");
+            }
+
+            // Retrieve the existing order
+            var existingOrder = await _unit.OrderRepository.GetByIdAsync(id);
+            if (existingOrder == null)
+            {
+                return NotFound<string>($"No order found with ID = {id}");
+            }
+            // Check if the customer exists
+            var customer = await _userManager.FindByIdAsync(editOrder.cust_id);
+            if (customer == null)
+            {
+                return NotFound<string>($"No customer found with ID = {editOrder.cust_id}");
+            }
+            // Clear existing order details
+            existingOrder.OrderDetails.Clear();
+
+
+            decimal newTotalPrice = 0;
+
+            // Update order details
+            foreach (var detail in editOrder.OrderDetails)
+            {
+                var book = await _unit.BooksRepository.GetByIdAsync(detail.book_id);
+                if (book == null)
+                {
+                    return NotFound<string>($"No book found with ID = {detail.book_id}");
+                }
+
+                // Add new order details
+                OrderDetails n = new OrderDetails
+                {
+                    book_id = detail.book_id,
+                    quentity = detail.quentity,
+                    unitprice = detail.unitprice
+                };
+                existingOrder.OrderDetails.Add(n);
+
+                // Calculate the total price for the order
+                newTotalPrice += n.quentity * n.unitprice;
+            }
+
+            // Update order properties
+            existingOrder.orderdate = editOrder.orderdate;
+            existingOrder.status = editOrder.status;
+            existingOrder.cust_id = editOrder.cust_id;
+            existingOrder.totalprice = newTotalPrice;
+
+            // Save changes
+            await _unit.OrderRepository.UpdateAsync(existingOrder);
+            await _unit.savechanges();
+
+            return Updated<string>("Order updated successfully.");
         }
+
     }
 }

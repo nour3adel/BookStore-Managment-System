@@ -2,6 +2,7 @@
 using BookStore.Application.Features;
 using BookStore.Domain.Classes;
 using BookStore.Domain.DTOs.CustomerDTOs;
+using FluentValidation;
 using Microsoft.AspNetCore.Identity;
 
 namespace BookStore.Application.Implementations
@@ -9,14 +10,25 @@ namespace BookStore.Application.Implementations
     public class CustomerServices : ResponseHandler, ICustomerServices
     {
         public UserManager<IdentityUser> _userManager;
-        public CustomerServices(UserManager<IdentityUser> userManager)
+        private readonly IValidator<RegisterCustomerDTO> _registerCustomerValidator;
+        public CustomerServices(UserManager<IdentityUser> userManager, IValidator<RegisterCustomerDTO> registerCustomerValidator)
         {
             _userManager = userManager;
+            _registerCustomerValidator = registerCustomerValidator;
 
         }
         #region Register Customer
         public async Task<Response<string>> RegisterUser(RegisterCustomerDTO user)
         {
+            // Validate the DTO
+            var validationResult = await _registerCustomerValidator.ValidateAsync(user);
+            if (!validationResult.IsValid)
+            {
+
+                var error = validationResult.Errors.First().ErrorMessage;
+                return BadRequest<string>(error);
+            }
+
             // Validate email
             if (await _userManager.FindByEmailAsync(user.email) != null)
             {
@@ -44,7 +56,9 @@ namespace BookStore.Application.Implementations
             if (!creationResult.Succeeded)
             {
                 var errors = string.Join(", ", creationResult.Errors.Select(e => e.Description));
-                return BadRequest<string>($"Customer creation failed: {errors}");
+                return BadRequest<string>($"{errors}");
+
+
             }
 
             // Assign role to the user

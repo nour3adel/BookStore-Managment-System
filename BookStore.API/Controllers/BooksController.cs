@@ -1,6 +1,7 @@
 ﻿using BookStore.API.Base;
 using BookStore.Application.Features;
 using BookStore.Domain.DTOs.BooksDTOs;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -12,14 +13,23 @@ namespace BookStore.API.Controllers
 
     public class BooksController : AppControllerBase
     {
+        #region Fields
+
         private readonly IBooksServices _booksServices;
 
+        #endregion
+
+        #region Constructor
         public BooksController(IBooksServices booksServices)
         {
             _booksServices = booksServices;
         }
+        #endregion
+
+        #region Get All Books
+
         [HttpGet]
-        [SwaggerOperation(Summary = "select all books ", Description = "example:  http:/localhost/api/books")]
+        [SwaggerOperation(Summary = "احصل على جميع الكتب ", Description = "example:  http:/localhost/api/books")]
         [SwaggerResponse(200, "return all books", typeof(IEnumerable<DisplayBookDTO>))]
 
         public async Task<IActionResult> getall()
@@ -27,8 +37,12 @@ namespace BookStore.API.Controllers
             var result = await _booksServices.GetAllBooks();
             return NewResult(result);
         }
+        #endregion
+
+        #region Get Book By ID
+
         [HttpGet("{id}")]
-        [SwaggerOperation(Summary = "can earch on book by book id ", Description = "example:  http:/localhost/api/books")]
+        [SwaggerOperation(Summary = "يمكن البحث عن الكتاب عن طريق معرف الكتاب ", Description = "example:  http:/localhost/api/books/{id}")]
         [SwaggerResponse(200, "return book data", typeof(DisplayBookDTO))]
         [SwaggerResponse(404, "if no book founded")]
         //[SwaggerIgnore]
@@ -37,9 +51,13 @@ namespace BookStore.API.Controllers
             var result = await _booksServices.GetByID(id);
             return NewResult(result);
         }
+        #endregion
+
+        #region Add New Book
+
         [HttpPost]
-        //[Authorize(Roles = "admin")]
-        [SwaggerOperation(Summary = "add new book")]
+        [Authorize(Roles = "admin")]
+        [SwaggerOperation(Summary = "أضف كتاب جديد")]
         [SwaggerResponse(201, "if book created succcesfully")]
         [SwaggerResponse(400, "ifinvalid book data")]
         public async Task<IActionResult> AddNewBook(AddBookDTO bookdto)
@@ -53,10 +71,13 @@ namespace BookStore.API.Controllers
             return BadRequest(ModelState);
 
         }
+        #endregion
+
+        #region Edit Book
 
         [HttpPut("{id}")]
-        //[Authorize(Roles = "admin")]
-        [SwaggerOperation(Summary = "edit book data")]
+        [Authorize(Roles = "admin")]
+        [SwaggerOperation(Summary = "تعديل بيانات الكتاب")]
         [SwaggerResponse(204, "if book updated succcesfully")]
         [SwaggerResponse(400, "ifinvalid book data")]
         public async Task<IActionResult> EditBook(int id, EditBookDTO bookdto)
@@ -70,15 +91,19 @@ namespace BookStore.API.Controllers
             return BadRequest(ModelState);
 
         }
+        #endregion
+
+        #region Delete Book
 
         [HttpDelete]
-        //[Authorize(Roles = "admin")]
-        [SwaggerOperation(Summary = "delete book from datatbase")]
+        [Authorize(Roles = "admin")]
+        [SwaggerOperation(Summary = "حذف الكتاب من قاعدة البيانات")]
         [SwaggerResponse(200, "if book deleted succcesfully")]
         public async Task<IActionResult> DeleteBook(int id)
         {
             var result = await _booksServices.Deletebook(id);
             return NewResult(result);
         }
+        #endregion
     }
 }

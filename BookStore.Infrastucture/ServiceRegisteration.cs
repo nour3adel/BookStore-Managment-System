@@ -20,13 +20,13 @@ namespace BookStore.Infrastucture
 
             services.AddIdentity<IdentityUser, IdentityRole>(option =>
             {
-                // Password settings.
-                option.Password.RequireDigit = true;
-                option.Password.RequireLowercase = true;
-                option.Password.RequireNonAlphanumeric = true;
-                option.Password.RequireUppercase = true;
-                option.Password.RequiredLength = 6;
-                option.Password.RequiredUniqueChars = 1;
+                //// Password settings.
+                //option.Password.RequireDigit = true;
+                //option.Password.RequireLowercase = true;
+                //option.Password.RequireNonAlphanumeric = true;
+                //option.Password.RequireUppercase = true;
+                //option.Password.RequiredLength = 6;
+                //option.Password.RequiredUniqueChars = 1;
 
                 // Lockout settings.
                 option.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
@@ -83,66 +83,110 @@ namespace BookStore.Infrastucture
                 c.SwaggerDoc("All", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Book Store Managment System",
-                    Description = "All Endpoints",
-
+                    Title = "Book Store Management System",
+                    Description = @"
+                                 The BookStore API provides a RESTful interface for managing an online bookstore’s inventory,
+                                customer orders, and author information. The API allows users to view available books,
+                                manage inventory, handle customer orders, and retrieve author details.
+                            ",
+                    TermsOfService = new Uri("https://www.nouradel.com/terms"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Nour Adel",
+                        Email = "nour3dell@gmail.com",
+                        Url = new Uri("https://www.nouradel.com/contact")
+                    }
                 });
                 c.SwaggerDoc("Accounts", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Accounts",
-                    Description = "Accounts Web Api in Asp.net Core Version .net7",
+
+
+                    Description = @"
+                                 The BookStore API provides a RESTful interface for managing an online bookstore’s inventory,
+                                customer orders, and author information. The API allows users to view available books,
+                                manage inventory, handle customer orders, and retrieve author details.
+                            ",
 
                 });
                 c.SwaggerDoc("Admins", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Admins",
-                    Description = "Admins Web Api in Asp.net Core Version .net8",
+
+                    Description = @"
+                                 This API provides functionalities that are accessible only to admin users. 
+        Admins have the ability to manage the entire bookstore, including adding, 
+        updating, and deleting books and authors, as well as handling orders. 
+        Only users with admin privileges can perform certain critical operations 
+        such as deleting or updating orders, books, and author information.
+                            ",
 
                 });
                 c.SwaggerDoc("Authors", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Authors",
-                    Description = "Authors Web Api in Asp.net Core Version .net7",
+
+                    Description = @"
+                                  This API allows users to manage authors in the bookstore. 
+                                You can view a list of authors, add new authors, 
+                                update author details, and delete authors (admin access only).
+                            ",
 
                 });
                 c.SwaggerDoc("Books", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Books",
-                    Description = "Books Web Api in Asp.net Core Version .net7",
+
+                    Description = @"
+                                 This API allows users to manage books, authors, and customer orders for an online bookstore. 
+        It provides functionalities for viewing books, adding, updating, and deleting books (admin only), 
+        and managing customer orders. The API is designed to streamline bookstore inventory and order management.
+                            ",
 
                 });
                 c.SwaggerDoc("Catlogs", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Catlogs",
-                    Description = "Catlogs Web Api in Asp.net Core Version .net7",
+
+                    Description = @"
+                                 The BookStore API provides a RESTful interface for managing an online bookstore’s inventory,
+                                customer orders, and author information. The API allows users to view available books,
+                                manage inventory, handle customer orders, and retrieve author details.
+                            ",
 
                 });
                 c.SwaggerDoc("Customers", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Customers",
-                    Description = "Customers Web Api in Asp.net Core Version .net7",
+
+                    Description = @"
+                                This API allows users to manage customer orders in the bookstore. 
+        You can fetch a list of all orders, view specific order details, 
+        place new orders, update order status, and delete orders (admin access only).
+                            ",
 
                 });
                 c.SwaggerDoc("Orders", new OpenApiInfo
                 {
                     Version = "v1",
                     Title = "Orders",
-                    Description = "Orders Web Api in Asp.net Core Version .net7",
+
+                    Description = @"
+                                  This API allows users to manage customer orders within the bookstore. 
+        It provides functionality for creating new orders, updating existing orders, 
+        fetching the details of specific orders, and deleting orders. 
+        Admins have special access to delete or update any orders, while customers 
+        can only manage their own orders.
+                            ",
 
                 });
-                c.SwaggerDoc("OrderDetails", new OpenApiInfo
-                {
-                    Version = "v1",
-                    Title = "OrderDetails",
-                    Description = "OrderDetails Web Api in Asp.net Core Version .net7",
 
-                });
 
                 c.DocInclusionPredicate((docName, apiDesc) =>
                 {
@@ -185,6 +229,9 @@ namespace BookStore.Infrastucture
             });
 
             #endregion
+
+
+
 
             return services;
         }

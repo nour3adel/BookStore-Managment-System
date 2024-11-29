@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -63,7 +62,6 @@ namespace BookStore.Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     bio = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    numberOfBooks = table.Column<int>(type: "int", nullable: false),
                     age = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

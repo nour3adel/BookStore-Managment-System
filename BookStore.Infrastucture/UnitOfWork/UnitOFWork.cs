@@ -11,12 +11,13 @@ namespace BookStore.Infrastructure.UnitOfWork
         GenericRepository<catlog> catlogsRepository;
         GenericRepository<Author> authorssRepository;
         GenericRepository<Order> orderRepository;
-        GenericRepository<OrderDetails> orderDEtailsRepository;
+
         public UnitOFWork(BookDBContext db)
         {
             this.db = db;
-
         }
+
+
         public GenericRepository<Book> BooksRepository
         {
             get
@@ -66,18 +67,7 @@ namespace BookStore.Infrastructure.UnitOfWork
                 return orderRepository;
             }
         }
-        public GenericRepository<OrderDetails> OrderDetailsRepository
-        {
-            get
-            {
-                if (orderDEtailsRepository == null)
-                {
-                    orderDEtailsRepository = new GenericRepository<OrderDetails>(db);
 
-                }
-                return orderDEtailsRepository;
-            }
-        }
         public async Task savechanges()
         {
             db.SaveChangesAsync();

@@ -1,5 +1,8 @@
 ﻿using BookStore.Application.Features;
 using BookStore.Application.Implementations;
+using BookStore.Application.Validators.CustomerValidators;
+using BookStore.Domain.DTOs.CustomerDTOs;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace BookStore.Application
@@ -13,7 +16,9 @@ namespace BookStore.Application
             services.AddScoped<IBooksServices, BooksServices>();
             services.AddScoped<ICustomerServices, CustomerServices>();
             services.AddScoped<IOrderServices, OrderServices>();
+            services.AddScoped<IAuthorServices, AuthorService>();
 
+            services.AddScoped<IValidator<RegisterCustomerDTO>, RegisterCustomerValidator>();
             return services;
         }
     }
